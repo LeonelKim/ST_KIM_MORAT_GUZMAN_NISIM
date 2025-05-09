@@ -58,6 +58,8 @@ void loop() {
       if (digitalRead(SW1) == HIGH && digitalRead(SW2) == HIGH) {
         setHora = rtc.getHour(true);
         setMin = rtc.getMinute();
+        estadoSW1=LIBRE;
+        estadoSW2=LIBRE;
         estado = P2;
       }
       break;
@@ -65,6 +67,7 @@ void loop() {
     case P2: 
       mostrarPantalla2();
       actualizarBotones();
+      
       if (digitalRead(SW1) == LOW && digitalRead(SW2) == LOW) {
         estado = ESPERA2;
       }
@@ -110,7 +113,9 @@ void actualizarBotones() {
       if (digitalRead(SW2)==HIGH){
       setMin = (setMin + 1) % 60;
       estadoSW2 = ESPERA_SUELTA;
-      } else if(digitalRead(SW1)==LOW)
+      } else if(digitalRead(SW1)==LOW){
+        estadoSW2 == LIBRE;
+      }
       break;
     case ESPERA_SUELTA:
       estadoSW2 = LIBRE;
@@ -142,8 +147,7 @@ void mostrarPantalla2() {
 
   display.clearBuffer();
   display.setFont(u8g2_font_ncenB12_tr);
-  display.drawStr(10, 25, "Setear Hora:");
-  display.drawStr(80, 25, buffer);
-  display.drawStr(0, 55, "SW1: Hora  SW2: Min");
+  display.drawStr(55, 25, buffer);
+  display.drawStr(0, 55, "SW1:H SW2:M");
   display.sendBuffer();
 }
